@@ -1,0 +1,17 @@
+server:
+  port: 20001
+eureka:
+  server:
+    enable-self-preservation: false
+  instance:
+    statusPageUrl: https://${eureka.hostname}/info
+    healthCheckUrl: https://${eureka.hostname}/health
+    homePageUrl: https://${eureka.hostname}/
+    hostname: eurka-server1
+  client:
+    # 表示是否注册自身到eureka服务器
+    # register-with-eureka: false
+    # 是否从eureka上获取注册信息
+    # fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:20002/eureka/

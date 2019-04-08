@@ -1,0 +1,16 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: client-config
+  cloud:
+    config:
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: server-config
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:20001/eureka/,http://localhost:20002/eureka/
+
