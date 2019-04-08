@@ -1,12 +1,11 @@
 package com.ry.servera;
 
 import brave.sampler.Sampler;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,6 +24,7 @@ public class HiController {
     private RestTemplate restTemplate;
 
     @Bean
+    @LoadBalanced
     public RestTemplate getRestTemplate(){
         return new RestTemplate();
     }
@@ -32,7 +32,7 @@ public class HiController {
     @RequestMapping("/hi")
     public String callHome(){
         LOG.log(Level.INFO, "calling trace service-hi  ");
-        return restTemplate.getForObject("http://localhost:8763/miya", String.class);
+        return restTemplate.getForObject("http://service-miya/miya", String.class);
     }
 
 
@@ -40,16 +40,6 @@ public class HiController {
     public String info(){
         LOG.log(Level.INFO, "calling trace service-hi ");
         return "i'm service-hi";
-    }
-
-    @RequestMapping("/hello")
-    @HystrixCommand(fallbackMethod = "hiError")
-    public String home(@RequestParam(value = "name", defaultValue = "forezp") String name) {
-        return "hi " + name + " ,i am from port:" + port;
-    }
-
-    public String hiError(String name) {
-        return "hi,"+name+",sorry,error!";
     }
 
     @Bean
